@@ -2,8 +2,8 @@ import numpy as np
 from numpy.testing import assert_array_equal
 import pytest
 
+from pyriemann.geometry.ajd import jade
 from pyriemann.spatialfilters import Xdawn, CSP, SPoC, BilinearFilter, AJDC
-from pyriemann.geometry.ajd import rjd
 
 
 pytestmark = pytest.mark.numpy_only
@@ -172,7 +172,7 @@ def test_xdawn_baselinecov(n_channels, use_baseline_cov, get_mats, get_labels):
 @pytest.mark.parametrize("n_filters", [3, 4, 5])
 @pytest.mark.parametrize("metric", ["euclid", "logeuclid", "riemann"])
 @pytest.mark.parametrize("log", [True, False])
-@pytest.mark.parametrize("ajd_method", ["ajd_pham", "rjd", "uwedge"])
+@pytest.mark.parametrize("ajd_method", ["ajd_pham", "jade", "uwedge"])
 def test_csp(n_filters, metric, log, ajd_method, get_mats, get_labels):
     n_classes, n_matrices, n_channels = 2, 6, 4
     X = get_mats(n_matrices, n_channels, "spd")
@@ -191,16 +191,13 @@ def test_csp(n_filters, metric, log, ajd_method, get_mats, get_labels):
         assert Xtr.shape == (n_matrices, n_components, n_components)
 
 
-@pytest.mark.parametrize("ajd_method", ["ajd_pham", "rjd", "uwedge", rjd])
-def test_csp_multiclass_diagonalization(
-    ajd_method, get_mats_params, get_labels
-):
-    """Multiclass CSP filters must jointly diagonalize the class covariances,
-    whatever the ajd_method (rjd returns a transposed diagonalizer)."""
+@pytest.mark.parametrize("ajd_method", ["ajd_pham", "jade", "uwedge", jade])
+def test_csp_multiclass(ajd_method, get_mats_params, get_labels):
+    """Multiclass CSP filters must jointly diagonalize the class covariances"""
     n_classes, n_matrices, n_channels = 3, 30, 4
     # matrices sharing a common eigenbasis are exactly jointly diagonalizable,
     # so any off-diagonal residual is a convention error, not an approximation
-    X, _, _ = get_mats_params(n_matrices, n_channels, "spd")
+    X = get_mats_params(n_matrices, n_channels, "spd")[0]
     y = get_labels(n_matrices, n_classes)
 
     csp = CSP(

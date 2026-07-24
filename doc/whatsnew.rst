@@ -10,13 +10,6 @@ A catalog of new features, improvements, and bug-fixes in each release.
 v0.13.dev
 ---------
 
-- Fix multiclass :class:`pyriemann.spatialfilters.CSP` with
-  ``ajd_method="rjd"``: ``rjd`` returns its diagonalizer in the transposed
-  convention of ``ajd_pham`` and ``uwedge``, so ``fit`` transposed it the wrong
-  way and produced spatial filters that did not jointly diagonalize the class
-  covariances.
-  :pr:`474` by :user:`gaoflow`
-
 - Update pyRiemann from Python 3.10 - 3.12 to 3.11 - 3.13.
   :pr:`462` by :user:`qbarthelemy`
 
@@ -36,6 +29,8 @@ v0.13.dev
 - Add :func:`pyriemann.geometry.tangentspace.transport_wasserstein` for parallel
   transport with the Bures-Wasserstein metric.
   :pr:`476` by :user:`AmitSubhash`
+- Deprecate ``rjd`` renamed into :func:`pyriemann.geometry.ajd.jade`, and transpose outputed diagonalizer.
+  :pr:`474` by :user:`gaoflow`
 
 v0.12 (July 2026)
 -----------------
@@ -436,7 +431,7 @@ v0.4 (Feb 2023)
   then used for ``transform()`` as well as for ``inverse_transform()``.
   :pr:`195` by :user:`qbarthelemy`
 
-- Enhance AJD: add ``init`` to :func:`pyriemann.geometry.ajd.ajd_pham` and :func:`pyriemann.geometry.ajd.rjd`,
+- Enhance AJD: add ``init`` to :func:`pyriemann.geometry.ajd.ajd_pham` and :func:`pyriemann.geometry.ajd.jade`,
   add ``warm_restart`` to :class:`pyriemann.spatialfilters.AJDC`.
   :pr:`196` by :user:`qbarthelemy`
 

@@ -6,7 +6,7 @@ from scipy.linalg import eigh, inv
 from sklearn.base import BaseEstimator, TransformerMixin
 
 from . import estimation as est
-from .geometry.ajd import ajd, ajd_pham, rjd
+from .geometry.ajd import ajd, ajd_pham
 from .geometry.covariance import (
     normalize,
     get_nondiag_weight,
@@ -307,8 +307,8 @@ class CSP(BilinearFilter):
         If true, return the log variance, otherwise return the spatially
         filtered covariance matrices.
     ajd_method : string | callable, default="ajd_pham"
-        Method for AJD, can be: "ajd_pham", "rjd", "uwedge", or a callable
-        function.
+        Method for AJD for multiclass CSP, can be:
+        "ajd_pham", "jade", "uwedge", or a callable function.
 
         .. versionadded:: 0.7
 
@@ -406,10 +406,7 @@ class CSP(BilinearFilter):
         elif len(classes) > 2:
             evecs, D = ajd(C, method=self.ajd_method)
             Ctot = gmean(C, metric=self.metric)
-            # rjd diagonalizes as D = V.T C V (filters are columns of V), while
-            # ajd_pham and uwedge use D = V C V.T (filters are rows of V)
-            if self.ajd_method not in ("rjd", rjd):
-                evecs = evecs.T
+            evecs = evecs.T
 
             # normalize
             for i in range(evecs.shape[1]):
