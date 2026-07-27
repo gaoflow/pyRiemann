@@ -371,6 +371,7 @@ def uwedge(X, *, init=None, eps=1e-7, n_iter_max=100):
 
 ajd_functions = {
     "ajd_pham": ajd_pham,
+    "rjd": rjd,
     "jade": jade,
     "uwedge": uwedge,
 }
