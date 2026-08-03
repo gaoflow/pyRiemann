@@ -29,6 +29,7 @@ v0.13.dev
 - Add :func:`pyriemann.geometry.tangentspace.transport_wasserstein` for parallel
   transport with the Bures-Wasserstein metric.
   :pr:`476` by :user:`AmitSubhash`
+
 - Deprecate ``rjd`` renamed into :func:`pyriemann.geometry.ajd.jade`, and transpose outputed diagonalizer.
   :pr:`474` by :user:`gaoflow`
 
